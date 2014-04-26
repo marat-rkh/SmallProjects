@@ -1,0 +1,8 @@
+No bloom:
+352
+Bloom md5 for filter size from 100% to 400% with 25% step:
+340 326 377 359 336 331 320 312 348 335 332 325 320 
+Bloom murmur3 for filter size from 100% to 400% with 25% step:
+329 310 343 324 325 300 291 283 309 301 293 288 279 
+Bloom murmur1 for filter size from 100% to 400% with 25% step:
+322 316 326 321 302 289 281 274 295 282 277 273 267 

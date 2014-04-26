@@ -1,0 +1,11 @@
+# # UNIX timestamp concatenated with nanoseconds
+# start="$(date +%s%N)"
+
+# Do some work here
+./Bloom/bloom ../tests/01 ../tests/text
+
+# # Milliseconds
+# end="$(($(date +%s%N)-T))"
+# end_ms="$((T/1000000))"
+
+# echo $(end_ms) > results
