@@ -22,12 +22,13 @@ public class GeneralState extends LexState {
                 lexer.state = new UnknownState(lexer);
                 lexer.state.processNext(type, symbol, pos, tokens);
                 break;
-            case WHITESPACE:
             case OPEN_PAR:
             case CLOSE_PAR:
             case OPERATOR:
             case ASSIGNMENT:
                 tokens.add(new Token(type, Character.toString(symbol), pos));
+                break;
+            case WHITESPACE:
                 break;
         }
     }

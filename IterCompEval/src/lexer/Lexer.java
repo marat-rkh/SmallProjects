@@ -6,14 +6,18 @@ import java.util.List;
 import java.util.Map;
 
 public class Lexer {
-    public LexState state = new GeneralState(this);
+    public LexState state;
+    public static final char PLUS_OP = '+';
+    public static final char MINUS_OP = '-';
+    public static final char MUL_OP = '*';
+    public static final char DIV_OP = '/';
     protected final Map<Character, Token.Type> singleLetter;
     {
         singleLetter = new HashMap<>();
-        singleLetter.put('+', Token.Type.OPERATOR);
-        singleLetter.put('-', Token.Type.OPERATOR);
-        singleLetter.put('*', Token.Type.OPERATOR);
-        singleLetter.put('/', Token.Type.OPERATOR);
+        singleLetter.put(PLUS_OP, Token.Type.OPERATOR);
+        singleLetter.put(MINUS_OP, Token.Type.OPERATOR);
+        singleLetter.put(MUL_OP, Token.Type.OPERATOR);
+        singleLetter.put(DIV_OP, Token.Type.OPERATOR);
         singleLetter.put('(', Token.Type.OPEN_PAR);
         singleLetter.put(')', Token.Type.CLOSE_PAR);
         singleLetter.put(' ', Token.Type.WHITESPACE);
@@ -21,6 +25,7 @@ public class Lexer {
     }
 
     public List<Token> tokenize(String input) {
+        state = new GeneralState(this);
         String normInput = normalizeInput(input);
         List<Token> tokens = new ArrayList<>();
         for(int i = 0; i < normInput.length(); i++) {

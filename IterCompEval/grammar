@@ -1,0 +1,9 @@
+stmt: expr | assignment
+
+assignment: ID ASSIGN_OP expr
+
+expr: term ((PLUS | MINUS) term)*
+
+term: fact ((MUL | DIV) fact)*
+
+fact: NUMBER | ID | OPEN_BR expr CLOSE_BR
