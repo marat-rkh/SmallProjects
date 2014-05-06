@@ -26,9 +26,8 @@ public class GeneralState extends LexState {
             case CLOSE_PAR:
             case OPERATOR:
             case ASSIGNMENT:
-                tokens.add(new Token(type, Character.toString(symbol), pos));
-                break;
             case WHITESPACE:
+                tokens.add(new Token(type, Character.toString(symbol), pos));
                 break;
         }
     }

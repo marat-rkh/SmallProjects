@@ -26,11 +26,13 @@ public class ParserTest {
         root = parser.parse(input);
         Assert.assertTrue(root == null);
         Assert.assertTrue(parser.errorPos == input.length() - 1);
+        Assert.assertTrue(parser.lastCheckedTokenPos == 3);
 
         input = "2 + (33 * )";
         root = parser.parse(input);
         Assert.assertTrue(root == null);
         Assert.assertTrue(parser.errorPos == input.length() - 1);
+        Assert.assertTrue(parser.lastCheckedTokenPos == 5);
 
         input = "2 + (33 * 2";
         root = parser.parse(input);

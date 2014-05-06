@@ -11,7 +11,8 @@ public class LexerTest {
     public void testTokenize() throws Exception {
         Lexer lexer = new Lexer();
         String input = "y = 5 +x / 133 * (2 %  z123      (1e#- ))";
-        List<Token> tokens = lexer.tokenize(input);
+        lexer.tokenize(input);
+        List<Token> tokens = lexer.getTokensWithNoWhitespaces();
         Assert.assertTrue(tokens.size() == 17);
         Assert.assertTrue(tokens.get(0).value.compareTo("y") == 0 && tokens.get(0).type == Token.Type.ID
                 && tokens.get(0).position == 0);

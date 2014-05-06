@@ -11,47 +11,67 @@ import model.Var;
 import model.Num;
 
 import java.util.LinkedList;
+import java.util.List;
 
 public class Parser {
     private Lexer lexer = new Lexer();
     private LinkedList<Token> tokens = new LinkedList<>();
     private int inputAfterLastPos;
 
-    public int errorPos;
+    public Integer lastCheckedTokenPos = null;
+    public Integer errorPos = null;
 
     public Exp parse(String input) {
         init(input);
         return parseStmt();
     }
 
+    public Exp parse(String input, List<Token> tokens) {
+        init(input, tokens);
+        return parseStmt();
+    }
+
     private void init(String input) {
+        setInitialValues(input);
+        lexer.tokenize(input);
+        tokens.addAll(lexer.getTokensWithNoWhitespaces());
+    }
+
+    private void init(String input, List<Token> tokens) {
+        setInitialValues(input);
+        this.tokens.addAll(tokens);
+    }
+
+    private void setInitialValues(String input) {
         errorPos = -1;
+        lastCheckedTokenPos = -1;
         inputAfterLastPos = input.length();
-        tokens.clear();
-        tokens.addAll(lexer.tokenize(input));
+        this.tokens.clear();
     }
 
     private Exp parseStmt() {
         Exp res;
-        if(tokens.size() > 2 && tokens.get(1).type == Token.Type.ASSIGNMENT) {
+        if(tokens.size() > 2 && tokens.get(0).type == Token.Type.ID && tokens.get(1).type == Token.Type.ASSIGNMENT) {
             res = parseAssignment();
         } else {
             res = parseExpr();
         }
         if(tokens.size() != 0) {
             errorPos = tokens.getFirst().position;
+            ++lastCheckedTokenPos;
             return null;
         }
         return res;
     }
 
     private Exp parseAssignment() {
-        Token first = tokens.removeFirst();
+        Token first = nextToken();
         if(first.type != Token.Type.ID) {
             errorPos = first.position;
+            ++lastCheckedTokenPos;
             return null;
         }
-        tokens.removeFirst();
+        nextToken();
         Exp expr = parseExpr();
         return expr == null ? null : new Assign(first.value, expr);
     }
@@ -65,12 +85,12 @@ public class Parser {
         if(term == null) { return null; }
         if(!tokens.isEmpty()) {
             if (tokens.getFirst().value.compareTo(Character.toString(Lexer.PLUS_OP)) == 0) {
-                tokens.removeFirst();
+                nextToken();
                 Exp rightTerm = parseExpr();
                 return rightTerm == null ? null : new Sum(term, rightTerm);
             }
             if (tokens.getFirst().value.compareTo(Character.toString(Lexer.MINUS_OP)) == 0) {
-                tokens.removeFirst();
+                nextToken();
                 Exp rightTerm = parseTerm();
                 return rightTerm == null ? null : new Sum(term, new Mul(new Num(-1), rightTerm));
             }
@@ -87,12 +107,12 @@ public class Parser {
         if(fact == null) { return null; }
         if(!tokens.isEmpty()) {
             if (tokens.getFirst().value.compareTo(Character.toString(Lexer.MUL_OP)) == 0) {
-                tokens.removeFirst();
+                nextToken();
                 Exp rightFact = parseTerm();
                 return rightFact == null ? null : new Mul(fact, rightFact);
             }
             if (tokens.getFirst().value.compareTo(Character.toString(Lexer.DIV_OP)) == 0) {
-                tokens.removeFirst();
+                nextToken();
                 Exp rightFact = parseFact();
                 return rightFact == null ? null : new Div(fact, rightFact);
             }
@@ -105,7 +125,7 @@ public class Parser {
             errorPos = inputAfterLastPos;
             return null;
         }
-        Token first = tokens.removeFirst();
+        Token first = nextToken();
         if(first.type == Token.Type.NUMBER) { return new Num(Integer.parseInt(first.value)); }
         if(first.type == Token.Type.ID) { return new Var(first.value); }
         if(first.type == Token.Type.OPEN_PAR) {
@@ -117,12 +137,19 @@ public class Parser {
             }
             if(tokens.getFirst().type != Token.Type.CLOSE_PAR) {
                 errorPos = tokens.getFirst().position;
+                ++lastCheckedTokenPos;
                 return null;
             }
-            tokens.removeFirst();
+            nextToken();
             return expr;
         }
         errorPos = first.position;
         return null;
+    }
+
+    private Token nextToken() {
+        Token first = tokens.removeFirst();
+        ++lastCheckedTokenPos;
+        return first;
     }
 }

@@ -18,7 +18,8 @@ public class Assign implements Exp {
 
     @Override
     public Exp evaluate(Map<String, Exp> context) {
-        context.put(name, expr);
-        return null;
+        Exp res = expr.evaluate(context);
+        context.put(name, res);
+        return res;
     }
 }

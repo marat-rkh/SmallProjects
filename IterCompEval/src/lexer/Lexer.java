@@ -23,11 +23,12 @@ public class Lexer {
         singleLetter.put(' ', Token.Type.WHITESPACE);
         singleLetter.put('=', Token.Type.ASSIGNMENT);
     }
+    List<Token> tokens = null;
 
-    public List<Token> tokenize(String input) {
+    public void tokenize(String input) {
         state = new GeneralState(this);
         String normInput = normalizeInput(input);
-        List<Token> tokens = new ArrayList<>();
+        tokens = new ArrayList<>();
         for(int i = 0; i < normInput.length(); i++) {
             state.processNext(getType(normInput.charAt(i)), normInput.charAt(i), i, tokens);
         }
@@ -35,7 +36,17 @@ public class Lexer {
         if(last != null) {
             tokens.add(last);
         }
-        return tokens;
+    }
+
+    public List<Token> getAllTokens() { return tokens; }
+    public List<Token> getTokensWithNoWhitespaces() {
+        List<Token> filtered = new ArrayList<>();
+        for (Token token : tokens) {
+            if(token.type != Token.Type.WHITESPACE) {
+                filtered.add(token);
+            }
+        }
+        return filtered;
     }
 
     private Token.Type getType(char symbol) {
@@ -50,6 +61,7 @@ public class Lexer {
     }
 
     private String normalizeInput(String input) {
-        return input.trim().replaceAll(" +", " ");
+//        return input.replaceAll(" +", " ");
+        return input;
     }
 }
