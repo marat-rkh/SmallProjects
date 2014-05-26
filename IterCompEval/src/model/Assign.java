@@ -17,7 +17,7 @@ public class Assign implements Exp {
     public void accept(ExpVisitor visitor) { visitor.visit(this); }
 
     @Override
-    public Exp evaluate(Map<String, Exp> context) {
+    public Exp evaluate(Map<String, Exp> context) throws Exception {
         Exp res = expr.evaluate(context);
         context.put(name, res);
         return res;

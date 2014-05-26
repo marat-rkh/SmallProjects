@@ -14,12 +14,12 @@ public class Var implements Exp {
     public void accept(ExpVisitor prettyPrinter) {
         prettyPrinter.visit(this);
     }
-//    @Override
-//    public void traverse(ExpVisitor visitor) {
-//        visitor.visit(this);
-//    }
+
     @Override
-    public Exp evaluate(Map<String, Exp> context) {
+    public Exp evaluate(Map<String, Exp> context) throws Exception {
+        if(context.containsKey(name)) {
+            return context.get(name).evaluate(context);
+        }
         return this;
     }
 }

@@ -1,11 +1,6 @@
 package visitors;
 
-import model.Assign;
-import model.Div;
-import model.Mul;
-import model.Num;
-import model.Sum;
-import model.Var;
+import model.*;
 
 public class ExpStringPrinter implements ExpVisitor {
     private String buffer = "";
@@ -15,7 +10,13 @@ public class ExpStringPrinter implements ExpVisitor {
         return bufferCopy;
     }
 
-    public void visit(Num exp) { buffer += exp.number; }
+    public void visit(Num exp) {
+        if(exp.number.doubleValue() < 0) {
+            buffer += ("(" + exp.number + ")");
+        } else {
+            buffer += exp.number;
+        }
+    }
 
     public void visit(Div div) {
         div.left.accept(this);
@@ -34,6 +35,14 @@ public class ExpStringPrinter implements ExpVisitor {
         sum.left.accept(this);
         buffer += " + ";
         sum.right.accept(this);
+        buffer += ")";
+    }
+
+    public void visit(Substr substr) {
+        buffer += "(";
+        substr.left.accept(this);
+        buffer += " - ";
+        substr.right.accept(this);
         buffer += ")";
     }
 

@@ -37,16 +37,16 @@ public class LexerTest {
         Assert.assertTrue(tokens.get(10).value.compareTo("%") == 0 && tokens.get(10).type == Token.Type.UNKNOWN
                 && tokens.get(10).position == 20);
         Assert.assertTrue(tokens.get(11).value.compareTo("z123") == 0 && tokens.get(11).type == Token.Type.ID
-                && tokens.get(11).position == 22);
+                && tokens.get(11).position == 23);
         Assert.assertTrue(tokens.get(12).value.compareTo("(") == 0 && tokens.get(12).type == Token.Type.OPEN_PAR
-                && tokens.get(12).position == 27);
+                && tokens.get(12).position == 33);
         Assert.assertTrue(tokens.get(13).value.compareTo("1e#") == 0 && tokens.get(13).type == Token.Type.UNKNOWN
-                && tokens.get(13).position == 28);
+                && tokens.get(13).position == 34);
         Assert.assertTrue(tokens.get(14).value.compareTo("-") == 0 && tokens.get(14).type == Token.Type.OPERATOR
-                && tokens.get(14).position == 31);
+                && tokens.get(14).position == 37);
         Assert.assertTrue(tokens.get(15).value.compareTo(")") == 0 && tokens.get(15).type == Token.Type.CLOSE_PAR
-                && tokens.get(15).position == 33);
+                && tokens.get(15).position == 39);
         Assert.assertTrue(tokens.get(16).value.compareTo(")") == 0 && tokens.get(16).type == Token.Type.CLOSE_PAR
-                && tokens.get(16).position == 34);
+                && tokens.get(16).position == 40);
     }
 }

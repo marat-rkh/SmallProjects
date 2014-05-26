@@ -12,22 +12,11 @@ public class Div extends BiExp {
     public void accept(ExpVisitor visitor) {
         visitor.visit(this);
     }
-//    @Override
-//    public void traverse(ExpVisitor visitor) {
-//        left.traverse(visitor);
-//        visitor.visit(this);
-//        right.traverse(visitor);
-//    }
+
     @Override
-    public Exp evaluate(Map<String, Exp> context) {
+    public Exp evaluate(Map<String, Exp> context) throws Exception {
         Exp leftExp = left.evaluate(context);
         Exp rightExp = right.evaluate(context);
-        if(leftExp instanceof Var && context.containsKey(((Var) leftExp).name)) {
-            leftExp = context.get(((Var) leftExp).name).evaluate(context);
-        }
-        if(rightExp instanceof Var && context.containsKey(((Var) rightExp).name)) {
-            rightExp = context.get(((Var) rightExp).name).evaluate(context);
-        }
         if(rightExp instanceof Num) {
             if (((Num) rightExp).number.doubleValue() == 0) {
                 throw new RuntimeException("StaticCheck failed: Divide by zero");
